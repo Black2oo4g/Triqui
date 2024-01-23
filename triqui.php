@@ -31,7 +31,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['idcelda'])) {
         header("Location: index.php");
         exit;
     }
-    
 }
 
 function marcar($fila, $columna)
@@ -44,30 +43,10 @@ function marcar($fila, $columna)
         }
         $_SESSION['turno'] = 1 - $_SESSION['turno'];
         $_SESSION['msjtriqui'] = "  ";
-    }else{
+    } else {
         $_SESSION['msjtriqui'] = "Lugar inválido";
     }
 }
-
-/*function validar()
-{
-    for ($i = 0; $i < 3; $i++) {
-        //Verificar filas
-        if ($_SESSION['tabla'][$i][0] != " " && $_SESSION['tabla'][$i][0] == $_SESSION['tabla'][$i][1] && $_SESSION['tabla'][$i][1] == $_SESSION['tabla'][$i][2]) {
-            return true;
-        } else {
-            //Verificar diagonales
-            if ($_SESSION['tabla'][0][0] != " " && $_SESSION['tabla'][0][0] == $_SESSION['tabla'][1][1] &&  $_SESSION['tabla'][1][1] == $_SESSION['tabla'][2][2]) {
-                return true;
-            } else {
-                if ($_SESSION['tabla'][0][2] != " " && $_SESSION['tabla'][0][2] == $_SESSION['tabla'][1][1] &&  $_SESSION['tabla'][1][1] == $_SESSION['tabla'][2][0]) {
-                    return true;
-                }elseif($_SESSION['tabla'][0][$i] != " " && $_SESSION['tabla'][0][$i] == $_SESSION['tabla'][1][$i] && $_SESSION['tabla'][1][$i] == $_SESSION['tabla'][2][$i])return true;
-            }
-        }
-    }
-    return false;
-}*/
 
 function validar()
 {
@@ -79,19 +58,19 @@ function validar()
             case $_SESSION['tabla'][0][$i] != " " && $_SESSION['tabla'][0][$i] == $_SESSION['tabla'][1][$i] && $_SESSION['tabla'][1][$i] == $_SESSION['tabla'][2][$i]:
                 // Verificar columnas
                 return true;
-                case $_SESSION['tabla'][0][0] != " " && $_SESSION['tabla'][0][0] == $_SESSION['tabla'][1][1] && $_SESSION['tabla'][1][1] == $_SESSION['tabla'][2][2]:
-                    // Verificar diagonal 1
-                    return true;
-                case $_SESSION['tabla'][0][2] != " " && $_SESSION['tabla'][0][2] == $_SESSION['tabla'][1][1] && $_SESSION['tabla'][1][1] == $_SESSION['tabla'][2][0]:
-                    // Verificar diagonal 2
-                    return true;
+            case $_SESSION['tabla'][0][0] != " " && $_SESSION['tabla'][0][0] == $_SESSION['tabla'][1][1] && $_SESSION['tabla'][1][1] == $_SESSION['tabla'][2][2]:
+                // Verificar diagonal 1
+                return true;
+            case $_SESSION['tabla'][0][2] != " " && $_SESSION['tabla'][0][2] == $_SESSION['tabla'][1][1] && $_SESSION['tabla'][1][1] == $_SESSION['tabla'][2][0]:
+                // Verificar diagonal 2
+                return true;
         }
     }
     return false;
 }
 
-
-function mostrartabla() {
+function mostrartabla()
+{
     echo "<table>";
     for ($i = 1; $i <= 3; $i++) {
         echo "<tr>";
@@ -105,10 +84,3 @@ function mostrartabla() {
     }
     echo "</table>";
 }
-/*<form method="post" action="">
-    <label for="idcelda">Coordenadas de la celda:</label>
-    <input type="text" id="idcelda" name="idcelda" required>
-    <input type="submit" value="Marcar">
-</form>*/
-
-
