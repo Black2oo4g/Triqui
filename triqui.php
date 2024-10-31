@@ -17,17 +17,37 @@ if (!isset($_SESSION['msjtriqui'])) {
     $_SESSION['msjtriqui'] = " ";
 }
 
+if (!isset($_SESSION['color'])) {
+    $_SESSION['color'] = [];
+}
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['idcelda'])) {
     $idcelda = $_POST['idcelda'];
 
     $fila = intval(substr($idcelda, 0, 1)) - 1;
     $columna = intval(substr($idcelda, 1, 1)) - 1;
-    marcar($fila, $columna);
-    if (validar()) {
-        $_SESSION['msjtriqui'] = "Triqui, GANASTE";
-        header("Location: index.php");
-        exit;
+
+    // Modificación para permitir que el usuario vuelva a seleccionar una celda si está ocupada
+    if ($_SESSION['tabla'][$fila][$columna] == " ") {
+        marcar($fila, $columna);
+
+        if (validar()) {
+            $_SESSION['msjtriqui'] = "Triqui, GANASTE";
+            header("Location: index.php");
+            exit;
+        } else {
+            jugarMaquina();
+            if (validar()) {
+                $_SESSION['msjtriqui'] = "Triqui, la máquina GANÓ";
+                header("Location: index.php");
+                exit;
+            } else {
+                header("Location: index.php");
+                exit;
+            }
+        }
     } else {
+        $_SESSION['msjtriqui'] = "Lugar ocupado, elige otro.";
         header("Location: index.php");
         exit;
     }
@@ -38,14 +58,28 @@ function marcar($fila, $columna)
     if ($_SESSION['tabla'][$fila][$columna] == " ") {
         if ($_SESSION['turno'] === 0) {
             $_SESSION['tabla'][$fila][$columna] = "X";
+            $_SESSION['color'][$fila][$columna] = "blue";
         } else {
             $_SESSION['tabla'][$fila][$columna] = "O";
+            $_SESSION['color'][$fila][$columna] = "red";
         }
         $_SESSION['turno'] = 1 - $_SESSION['turno'];
         $_SESSION['msjtriqui'] = "  ";
     } else {
         $_SESSION['msjtriqui'] = "Lugar inválido";
     }
+}
+
+function jugarMaquina()
+{
+    do {
+        $fila = rand(0, 2);
+        $columna = rand(0, 2);
+    } while ($_SESSION['tabla'][$fila][$columna] != " ");
+
+    $_SESSION['tabla'][$fila][$columna] = "O";
+    $_SESSION['color'][$fila][$columna] = "red";
+    $_SESSION['turno'] = 1 - $_SESSION['turno'];
 }
 
 function validar()
@@ -76,11 +110,14 @@ function mostrartabla()
         echo "<tr>";
         for ($j = 1; $j <= 3; $j++) {
             $id = $i . $j;
-            echo "<td id='$id'>";
-            echo $_SESSION['tabla'][$i - 1][$j - 1];
+            $contenido = $_SESSION['tabla'][$i - 1][$j - 1];
+            $color = isset($_SESSION['color'][$i - 1][$j - 1]) ? $_SESSION['color'][$i - 1][$j - 1] : '';
+            echo "<td id='$id' class='$color'>";
+            echo $contenido;
             echo "</td>";
         }
         echo "</tr>";
     }
     echo "</table>";
 }
+?>
